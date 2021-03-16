@@ -1,0 +1,21 @@
+string findLastSubstring(string &str) {
+    // Length of given string.
+    int n = str.length();
+    
+    // Lexicographical last substring
+    string lastSubstr;
+    
+    // One by one find all substring
+    for(int i = 0; i < n; i++) {
+        string curSubstr;
+        for(int j = i; j < n; j++) {
+            curSubstr += str[j];
+            // Update 'lastSubstr', If 'curSubstr' is lexicographically greater than 'lastSubstr'.
+            if(curSubstr > lastSubstr) {
+                lastSubstr = curSubstr;
+            }
+        }
+    }
+
+    return lastSubstr;
+}

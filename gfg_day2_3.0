@@ -1,0 +1,17 @@
+
+int minimumRotations(int n, string s)
+{
+	string concat = s + s;
+	for (int i = 1; i < n; i++)
+	{
+		string currSubstring = concat.substr(i, n);
+		//Checking if the current substring of length n equals s or not.
+		if (s == currSubstring)
+		{
+			return i;
+		}
+
+	}
+
+	return n;
+}

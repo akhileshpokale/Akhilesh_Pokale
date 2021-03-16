@@ -1,0 +1,68 @@
+
+
+#include<string.h>
+
+vector<int> patternSearch(string text, string pattern) {
+    int sizeOfAlphabet = 256;
+    int n = pattern.size();
+    int m = text.size();
+
+    vector<int>ans;
+    int preComputed[sizeOfAlphabet];
+    char textArray[m + 1];
+    strcpy(textArray, text.c_str());
+    char patternArray[n + 1];
+    strcpy(patternArray, pattern.c_str());
+
+
+    // Initialize all occurrences as -1  
+    for (int i = 0; i < sizeOfAlphabet; i++){
+        preComputed[i] = -1;  
+    }
+
+    // Precomputation for bad characters heuristic
+    for(int i = 0; i < n; i++) {
+        preComputed[(int)patternArray[i]] = i;
+    }
+
+    // 'skip' is skip of the pattern with respect to text
+    int skip = 0;
+
+    while(skip <= (m - n)){
+        int j = n - 1;
+
+        /*
+         * Keep decreasing skip j of pattern while characters of pattern and text are
+         * matching at the shift skip 
+         */
+        while(j >= 0 and patternArray[j] == textArray[skip + j]) {
+            j--;
+        }
+
+        // If the pattern is found then we will get a negative j
+        if(j < 0) {
+            ans.push_back(skip);
+
+            // Shift the pattern as discussed so that last occurence in pattern matches with text
+            if((skip + n) < m) {
+                skip += n - preComputed[textArray[skip + n]];
+            }
+
+            else {
+                skip += 1;
+            }
+        }
+
+        else {
+            // Shift to align bad character
+            skip += max(1, j - preComputed[textArray[skip + j]]);
+        }
+    }
+
+    // If the pattern is not found
+    if(ans.size() == 0) {
+        ans.push_back(-1);
+    }
+
+    return ans;
+}
